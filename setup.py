@@ -36,7 +36,7 @@ setup(
     keywords=[''],
     install_requires=[],
     extras_require={
-        ':python_version=="3.3"': ['asyncio'],
+        ':python_version=="3.3"': ['asyncio', 'singledispatch'],
     },
     classifiers=[
         "Development Status :: 5 - Production/Stable",

@@ -3,7 +3,10 @@ from aiomeasures.metrics import CountingMetric, GaugeMetric
 from aiomeasures.metrics import HistogramMetric, SetMetric, TimingMetric
 from datetime import timedelta
 from decimal import Decimal
-from functools import singledispatch
+try:
+    from functools import singledispatch
+except:
+    from singledispatch import singledispatch
 
 
 @singledispatch
