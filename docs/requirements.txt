@@ -1,0 +1,3 @@
+sphinx
+sphinxcontrib-domaintools
+sphinxcontrib-httpdomain
