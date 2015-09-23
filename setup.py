@@ -29,7 +29,7 @@ setup(
     name='aiomeasures',
     version=versioneer.get_version(),
     description="Metrics metrics metrics",
-    author="",
+    author="Xavier Barbosa",
     author_email='clint.northwood@gmail.com',
     url='https://lab.errorist.xyz/abc/',
     packages=find_packages(),
