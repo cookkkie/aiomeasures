@@ -28,7 +28,7 @@ cmds.update({'test': PyTest})
 setup(
     name='aiomeasures',
     version=versioneer.get_version(),
-    description="Metrics metrics metrics",
+    description="Collect and send metrics to StatsD",
     author="Xavier Barbosa",
     author_email='clint.northwood@gmail.com',
     url='https://lab.errorist.xyz/abc/',

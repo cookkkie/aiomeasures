@@ -1,8 +1,8 @@
 AIO Measures
 ============
 
-This library allows you to send metrics to your StatsD server. This works on
-Python >= 3.3 and relies or asyncio.
+This library allows you to send metrics to your StatsD server.
+This works on Python >= 3.3 and relies or asyncio.
 
 
 Installation::
@@ -12,7 +12,7 @@ Installation::
 
 Usage::
 
-    from aiomeasures impor StatsD
+    from aiomeasures import StatsD
 
     client = StatsD('udp://127.0.0.1:6789')
     client.incr('foo')
@@ -20,3 +20,6 @@ Usage::
     with client.timer('baz'):
         # long process
         pass
+
+
+The client will send metrics to server as possible.
