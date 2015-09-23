@@ -18,7 +18,7 @@ class PyTest(Command):
         errno = subprocess.call([sys.executable,
                                  'runtests.py',
                                  'tests/',
-                                 '--cov', '',
+                                 '--cov', 'aiomeasures',
                                  '--cov-report', 'html'])
         raise SystemExit(errno)
 
@@ -26,7 +26,7 @@ cmds = versioneer.get_cmdclass()
 cmds.update({'test': PyTest})
 
 setup(
-    name='AIOTow',
+    name='aiomeasures',
     version=versioneer.get_version(),
     description="Metrics metrics metrics",
     author="",

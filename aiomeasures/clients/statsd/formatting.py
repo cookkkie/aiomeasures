@@ -1,16 +1,9 @@
-from .bases import Client
-from aiotow.events import Event
-from aiotow.metrics import CountingMetric, GaugeMetric
-from aiotow.metrics import HistogramMetric, SetMetric, TimingMetric
+from aiomeasures.events import Event
+from aiomeasures.metrics import CountingMetric, GaugeMetric
+from aiomeasures.metrics import HistogramMetric, SetMetric, TimingMetric
 from datetime import timedelta
 from decimal import Decimal
 from functools import singledispatch
-
-
-class StatsD(Client):
-
-    def format(self, obj, prefix=None):
-        return format(obj, prefix)
 
 
 @singledispatch

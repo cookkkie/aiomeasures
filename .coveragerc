@@ -1,6 +1,6 @@
 [run]
 omit =
-    /_version.py
+    aiomeasures/_version.py
 
 [report]
 exclude_lines =

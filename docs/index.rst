@@ -1,7 +1,7 @@
-Welcome to aiotow's documentation!
+Welcome to aiomeasures's documentation!
 ==================================
 
-aiotow requires a nice documentation.
+aiomeasures requires a nice documentation.
 This documentation has been generated |today|.
 
 

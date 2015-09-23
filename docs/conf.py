@@ -55,7 +55,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'aiotow'
+project = 'aiomeasures'
 copyright = '2015, '
 author = ''
 
@@ -231,7 +231,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, '.tex', 'aiotow Documentation',
+  (master_doc, '.tex', 'aiomeasures Documentation',
    '', 'manual'),
 ]
 
@@ -261,7 +261,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, '', 'aiotow Documentation',
+    (master_doc, '', 'aiomeasures Documentation',
      [author], 1)
 ]
 
@@ -275,8 +275,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'aiotow', 'aiotow Documentation',
-   author, 'aiotow', 'Metrics metrics metrics',
+  (master_doc, 'aiomeasures', 'aiomeasures Documentation',
+   author, 'aiomeasures', 'Metrics metrics metrics',
    'Miscellaneous'),
 ]
 
