@@ -24,9 +24,15 @@ class StatsDReporter:
         """Sends key/value pairs via UDP or TCP.
         """
         msg = bytearray()
-        for metric in metrics:
+        for i, metric in enumerate(metrics, start=1):
             msg += bytes('%s\n' % metric, encoding='utf-8')
-        self.protocol.send(msg)
+            if i % 20 == 0:
+                # small packets
+                self.protocol.send(msg)
+                msg[:] = []
+        if msg:
+            self.protocol.send(msg)
+            msg[:] = []
 
     @asyncio.coroutine
     def connect(self):
