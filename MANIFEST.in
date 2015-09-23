@@ -1,2 +1,2 @@
 include versioneer.py
-include aiomesures/_version.py
+include aiomeasures/_version.py
