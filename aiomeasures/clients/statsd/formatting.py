@@ -1,7 +1,8 @@
+from aiomeasures.checks import Check
 from aiomeasures.events import Event
 from aiomeasures.metrics import CountingMetric, GaugeMetric
 from aiomeasures.metrics import HistogramMetric, SetMetric, TimingMetric
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 try:
     from functools import singledispatch
@@ -10,57 +11,88 @@ except:
 
 
 @singledispatch
-def format(obj, prefix=None):
+def format(obj, prefix=None, tags=None):
     raise ValueError('Cannot consume %r' % obj)
 
 
+@format.register(Check)
+def format_check(check, prefix=None, tags=None):
+    response = '_sc|%s' % check.name
+    if check.status in (0, 'ok', 'OK'):
+        response += '|0'
+    if check.status in (1, 'warn', 'warning', 'WARNING'):
+        response += '|1'
+    if check.status in (2, 'crit', 'critical', 'CRITICAL'):
+        response += '|2'
+    if check.status in (3, 'unknown', 'UNKNOWN'):
+        response += '|3'
+
+    if check.timestamp:
+        response += '|d:%s' % format_timestamp(check.timestamp)
+    if check.hostname:
+        response += '|h:%s' % check.hostname
+    if check.tags or tags:
+        tags = format_tags(check.tags, tags)
+        response += '|#%s' % ','.join(tags)
+    if check.message:
+        response += '|m:%s' % check.message
+    return response
+
+
 @format.register(Event)
-def format_event(event, prefix=None):
+def format_event(event, prefix=None, tags=None):
     a, b = len(event.title), len(event.text)
     response = '_e{%s,%s}%s|%s' % (a, b, event.title, event.text)
-    if event.alert_type:
-        response += '|t:%s' % event.alert_type
+    if event.date_happened:
+        response += '|d:%s' % format_timestamp(event.date_happened)
+    if event.hostname:
+        response += '|h:%s' % event.hostname
     if event.aggregation_key:
         response += '|k:%s' % event.aggregation_key
     if event.priority:
         response += '|p:%s' % event.priority
-    if event.tags:
-        tags = format_tags(event.tags)
+    if event.source_type_name:
+        response += '|s:%s' % event.source_type_name
+    if event.alert_type:
+        response += '|t:%s' % event.alert_type
+
+    if event.tags or tags:
+        tags = format_tags(event.tags, tags)
         response += '|#%s' % ','.join(tags)
     return response
 
 
 @format.register(CountingMetric)
-def format_counting(metric, prefix=None):
-    name, value, suffix = format_metric(metric, prefix)
+def format_counting(metric, prefix=None, tags=None):
+    name, value, suffix = format_metric(metric, prefix, tags)
     return '%s:%s|c%s' % (name, value, suffix)
 
 
 @format.register(HistogramMetric)
-def format_histogram(metric, prefix=None):
-    name, value, suffix = format_metric(metric, prefix)
+def format_histogram(metric, prefix=None, tags=None):
+    name, value, suffix = format_metric(metric, prefix, tags)
     return '%s:%s|h%s' % (name, value, suffix)
 
 
 @format.register(GaugeMetric)
-def format_gauge(metric, prefix=None):
-    name, value, suffix = format_metric(metric, prefix)
+def format_gauge(metric, prefix=None, tags=None):
+    name, value, suffix = format_metric(metric, prefix, tags)
     return '%s:%s|g%s' % (name, value, suffix)
 
 
 @format.register(SetMetric)
-def format_set(metric, prefix=None):
-    name, value, suffix = format_metric(metric, prefix)
+def format_set(metric, prefix=None, tags=None):
+    name, value, suffix = format_metric(metric, prefix, tags)
     return '%s:%s|s%s' % (name, value, suffix)
 
 
 @format.register(TimingMetric)
-def format_timing(metric, prefix=None):
-    name, value, suffix = format_metric(metric, prefix)
+def format_timing(metric, prefix=None, tags=None):
+    name, value, suffix = format_metric(metric, prefix, tags)
     return '%s:%s|ms%s' % (name, value, suffix)
 
 
-def format_metric(metric, prefix=None):
+def format_metric(metric, prefix=None, tags=None):
     name = format_name(metric.name, prefix)
     value = format_value(metric.value, metric.delta)
 
@@ -68,8 +100,8 @@ def format_metric(metric, prefix=None):
     if metric.rate is not None:
         suffix += '|%s' % format_rate(metric.rate)
 
-    if metric.tags:
-        tags = format_tags(metric.tags)
+    if metric.tags or tags:
+        tags = format_tags(metric.tags, tags)
         suffix += '|#%s' % ','.join(tags)
 
     return name, value, suffix
@@ -91,8 +123,16 @@ def format_rate(obj):
         return data
 
 
-def format_tags(obj):
-    return ['%s:%s' % (k, v) for k, v in obj.items()]
+def format_tags(obj, defaults=None):
+    result = set()
+    for src in (obj, defaults):
+        if isinstance(src, dict):
+            result.update(['%s:%s' % (k, v) for k, v in src.items()])
+        elif isinstance(src, list):
+            result.update(src)
+        elif isinstance(src, str):
+            result.add(src)
+    return sorted(result)
 
 
 def format_name(name, prefix=None):
@@ -105,3 +145,11 @@ def format_value(value, delta=None):
     if delta and value > 0:
         return '+%s' % value
     return '%s' % value
+
+
+def format_timestamp(value):
+    if isinstance(value, datetime):
+        return int(value.timestamp())
+    if isinstance(value, float):
+        return int(value)
+    return value

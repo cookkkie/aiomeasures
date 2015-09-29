@@ -9,16 +9,19 @@ from random import random
 
 class StatsD(Client):
 
-    def __init__(self, addr, *, prefix=None, loop=None):
+    def __init__(self, addr, *, prefix=None, tags=None, loop=None):
         """Sends statistics to the stats daemon over UDP
 
         Parameters:
             addr (str): the address in the form udp://host:port
             loop (EventLoop): the event loop
+            prefix (str): prefix for all keys
+            tags (dict): default tags for everything
         """
         self.loop = loop or asyncio.get_event_loop()
         self.log = logging.getLogger(__name__)
         self.prefix = prefix
+        self.tags = tags
         self.collector = Collector([], 5000)
         self.reporter = StatsDReporter(addr, loop=self.loop)
 
@@ -29,7 +32,7 @@ class StatsD(Client):
         return metric
 
     def format(self, obj):
-        return formatting.format(obj, self.prefix)
+        return formatting.format(obj, self.prefix, self.tags)
 
     @asyncio.coroutine
     def send(self):

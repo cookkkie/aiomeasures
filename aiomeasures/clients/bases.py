@@ -1,5 +1,6 @@
 import asyncio
 from abc import ABCMeta, abstractmethod
+from aiomeasures.checks import Check
 from aiomeasures.events import Event
 from aiomeasures.metrics import CountingMetric, GaugeMetric
 from aiomeasures.metrics import HistogramMetric, SetMetric, TimingMetric
@@ -41,11 +42,13 @@ class Client(metaclass=ABCMeta):
         metric = SetMetric(name, value, rate=rate, tags=tags)
         return self.register(metric)
 
-    def event(self, title, text, alert_type=None, aggregation_key=None,
-              source_type_name=None, date_happened=None, priority=None,
-              tags=None, hostname=None):
-        event = Event(title, text, alert_type, priority)
+    def event(self, title, text, **kwargs):
+        event = Event(title, text, **kwargs)
         return self.register(event)
+
+    def check(self, name, status, **kwargs):
+        check = Check(name, status, **kwargs)
+        return self.register(check)
 
     @abstractmethod
     def format(self, metric, prefix=None):

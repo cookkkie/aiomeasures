@@ -54,10 +54,37 @@ def test_formatting(metric, expected):
     assert handler.format(metric) == expected
 
 
+tags = [
+    ({}, {}, ''),
+    ({'bar': 'baz'}, {}, '|#bar:baz'),
+    ({}, {'bar': 'baz'}, '|#bar:baz'),
+    ({'bar': 'baz'}, {'bar': 'qux'}, '|#bar:baz,bar:qux'),
+]
+
+@pytest.mark.parametrize('tags,defaults,expected', tags)
+def test_tags(tags, defaults, expected):
+    metric = aiomeasures.CountingMetric('foo', 1, tags=tags)
+    handler = aiomeasures.StatsD(':0', tags=defaults)
+    assert handler.format(metric) == 'foo:1|c%s' % expected
+
+
 def test_events():
     event = aiomeasures.Event('Man down!', 'This server needs assistance.')
     handler = aiomeasures.StatsD(':0')
     assert handler.format(event) == '_e{9,29}Man down!|This server needs assistance.'
+
+checks = [
+    (aiomeasures.Check('srv', 'OK'), '_sc|srv|0'),
+    (aiomeasures.Check('srv', 'warning'), '_sc|srv|1'),
+    (aiomeasures.Check('srv', 'crit'), '_sc|srv|2'),
+    (aiomeasures.Check('srv', 'UNKNOWN'), '_sc|srv|3'),
+    (aiomeasures.Check('srv', 'OK', tags={'foo': 'bar'}, message='baz'), '_sc|srv|0|#foo:bar|m:baz'),
+]
+
+@pytest.mark.parametrize('check,expected', checks)
+def test_checks(check,expected):
+    handler = aiomeasures.StatsD(':0')
+    assert handler.format(check) == expected
 
 
 @asyncio.coroutine
