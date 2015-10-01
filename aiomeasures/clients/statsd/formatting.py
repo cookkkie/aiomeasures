@@ -2,6 +2,7 @@ from aiomeasures.checks import Check
 from aiomeasures.events import Event
 from aiomeasures.metrics import CountingMetric, GaugeMetric
 from aiomeasures.metrics import HistogramMetric, SetMetric, TimingMetric
+from collections.abc import Mapping
 from datetime import datetime, timedelta
 from decimal import Decimal
 try:
@@ -126,7 +127,7 @@ def format_rate(obj):
 def format_tags(obj, defaults=None):
     result = set()
     for src in (obj, defaults):
-        if isinstance(src, dict):
+        if isinstance(src, Mapping):
             result.update(['%s:%s' % (k, v) for k, v in src.items()])
         elif isinstance(src, list):
             result.update(src)
