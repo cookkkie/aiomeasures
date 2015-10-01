@@ -137,7 +137,7 @@ def format_tags(obj, defaults=None):
 
 def format_name(name, prefix=None):
     if prefix:
-        return '%s.%s' % (name)
+        return '%s.%s' % (prefix, name)
     return '%s' % name
 
 
