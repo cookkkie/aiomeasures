@@ -7,7 +7,7 @@ from aiomeasures.reporters import StatsDReporter
 from random import random
 
 
-class StatsD(Client):
+class Datadog(Client):
 
     def __init__(self, addr, *, prefix=None, tags=None, loop=None):
         """Sends statistics to the stats daemon over UDP
@@ -35,7 +35,7 @@ class StatsD(Client):
 
     @asyncio.coroutine
     def send(self):
-        """Sends key/value pairs to StatsD Server.
+        """Sends key/value pairs to Datadog agent.
         """
         yield from self.reporter.connect()
         rate = random()
