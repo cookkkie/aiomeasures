@@ -12,9 +12,9 @@ Installation::
 
 Usage::
 
-    from aiomeasures import StatsD
+    from aiomeasures import Datadog
 
-    client = StatsD('udp://127.0.0.1:6789')
+    client = Datadog('udp://127.0.0.1:6789')
     client.incr('foo')
     client.decr('bar', tags={'one': 'two'})
     with client.timer('baz'):
@@ -22,4 +22,4 @@ Usage::
         pass
 
 
-The client will send metrics to server as possible.
+The client will send metrics to agent as possible.
