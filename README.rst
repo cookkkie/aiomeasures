@@ -2,7 +2,7 @@ AIO Measures
 ============
 
 This library allows you to send metrics to your Datadog server.
-This works on Python >= 3.3 and relies or asyncio.
+This works on Python >= 3.3 and relies on asyncio.
 
 
 Installation::
