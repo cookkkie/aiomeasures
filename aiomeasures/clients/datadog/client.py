@@ -27,7 +27,8 @@ class Datadog(Client):
 
     def register(self, metric):
         self.collector.append(metric)
-        self.loop.create_task(self.send())
+        asyncio.Task(self.send(), loop=self.loop)
+        # self.loop.async(self.send())
         return metric
 
     def format(self, obj):
