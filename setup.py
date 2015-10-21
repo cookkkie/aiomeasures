@@ -31,7 +31,7 @@ setup(
     description="Collect and send metrics to StatsD",
     author="Xavier Barbosa",
     author_email='clint.northwood@gmail.com',
-    url='https://lab.errorist.xyz/abc/',
+    url='http://lab.errorist.xyz/abc/',
     packages=find_packages(),
     keywords=[''],
     install_requires=[],
