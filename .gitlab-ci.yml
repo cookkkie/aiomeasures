@@ -14,6 +14,12 @@ python3.4 tests:
   tags:
     - python3.4
 
+python3.5 tests:
+  script:
+    - py.test --cov aiomeasures --cov-report term-missing tests/
+  tags:
+    - python3.5
+
 publish to pypi:
   type: deploy
   script:
