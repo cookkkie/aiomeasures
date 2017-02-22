@@ -13,6 +13,7 @@ class Check:
         self.hostname = hostname
         self.tags = tags
         self.message = message
+        self.value = None
 
     def __repr__(self):
         args = ['%s=%s' for attr in ()]
