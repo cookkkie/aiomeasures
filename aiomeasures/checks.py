@@ -3,7 +3,8 @@ __all__ = ['Check']
 
 class Check:
 
-    __slots__ = ('name', 'status', 'timestamp', 'hostname', 'tags', 'message')
+    __slots__ = ('name', 'status', 'timestamp', 'hostname', 'tags', 'message',
+                 'value')
 
     def __init__(self, name, status, timestamp=None,
                  hostname=None, tags=None, message=None):
