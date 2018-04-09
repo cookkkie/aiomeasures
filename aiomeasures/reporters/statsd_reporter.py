@@ -45,7 +45,8 @@ class StatsDReporter:
                 self.protocol = protocol
 
     def close(self):
-        self.protocol.close()
+        if self.protocol:
+            self.protocol.close()
 
 
 class UDPProtocol(asyncio.Protocol):
