@@ -97,5 +97,5 @@ class Timer:
         self._started = perf_counter()
 
     def stop(self):
-        value = int((perf_counter() - self._started) * 1000)
+        value = (perf_counter() - self._started) * 1000
         self.client.timing(self.name, value, rate=self.rate, tags=self.tags)
